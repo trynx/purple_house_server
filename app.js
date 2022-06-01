@@ -1,10 +1,21 @@
 const express = require("express");
 const connectDB = require("./config/db");
-
+const cors = require("cors");
+const corsOptions = {
+    origin: "http://localhost:3000",
+};
 // Routes
-const jobs = require("./routes/api/job");
+const jobs = require("./routes/api/job.routes");
+const auth = require("./routes/api/auth.routes");
 
 const app = express();
+
+app.use(cors(corsOptions));
+// Parse requests of content-type - application/json
+app.use(express.json());
+
+// Parse requests of content-type - application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: true }));
 
 //#region Previous things - keep for now if need something
 // const cors = require("cors");
@@ -34,6 +45,7 @@ app.get("/", (req, res) => res.send("I am Groot or not..."));
 
 // Add Routes
 app.use("/api/jobs", jobs);
+app.use("/api/auth", auth);
 
 const port = process.env.PORT || 8088;
 

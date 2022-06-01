@@ -1,3 +1,4 @@
 {
-    "mongoURI": "mongodb://127.0.0.1:27017/purple_house"
+    "mongoURI": "mongodb://127.0.0.1:27017/purple_house",
+    "secret": "groot-secret-key"
 }

@@ -1,8 +1,9 @@
+const { verifyToken } = require("../../middlewares/authJwt");
 const express = require("express");
 const router = express.Router();
 
 // Load Job model
-const Job = require("../../models/Job");
+const Job = require("../../models/job.model");
 
 // @route GET api/jobs/test
 // @description test job route
@@ -13,6 +14,11 @@ router.get("/test", (req, res) => res.send("job route testing :)"));
 // @description get all jobs
 // @access Public
 router.get("/", async (req, res) => {
+    res.json({ groot: "I am Groot" });
+});
+
+router.get("/jobs", [verifyToken], async (req, res) => {
+    // @ts-ignore
     const { result, err } = await Job.find();
 
     if (err) {
@@ -20,7 +26,7 @@ router.get("/", async (req, res) => {
         return;
     }
 
-    res.json({ ...result, groot: "I am Groot" });
+    res.json({ result });
 });
 
 // TODO Continue with the rest of the routers...
