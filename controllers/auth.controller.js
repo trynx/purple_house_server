@@ -19,6 +19,7 @@ exports.register = (req, res) => {
     }
 
     // TODO: Validate password sastify the conditions (over 8 letters, etc...)
+    // TODO: Validate email sastify the conditions (regex that the email is valid)
     const user = new User({
         username: req.body.username,
         password: bcrypt.hashSync(req.body.password),
