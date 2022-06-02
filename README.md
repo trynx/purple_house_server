@@ -19,3 +19,11 @@ If you're using VS code, just run F5(debugging), and it will run the `npm run wa
 # Run MongoDB
 
 After you have the local MongoDB installed, run `npm run dbon`.
+
+# Tests
+
+## Postman
+
+If you want to test the server and the api's after the server is running, you can use Postman and import this collection: https://www.getpostman.com/collections/84807d365549e4b49563
+
+To import the link: File -> Import -> Link
