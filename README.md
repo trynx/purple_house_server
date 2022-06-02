@@ -27,3 +27,7 @@ After you have the local MongoDB installed, run `npm run dbon`.
 If you want to test the server and the api's after the server is running, you can use Postman and import this collection: https://www.getpostman.com/collections/84807d365549e4b49563
 
 To import the link: File -> Import -> Link
+
+## Automatic tests
+
+To run automatic tests, first verify that you aren't running the server, then do `npm run test`.
