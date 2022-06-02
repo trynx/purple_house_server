@@ -1,8 +1,8 @@
 const config = require("../config/auth.config");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-const db = require("../models/index");
-const { user: User, refreshToken: RefreshToken } = db;
+const models = require("../models");
+const { user: User, refreshToken: RefreshToken } = models;
 
 const isRequestValid = (req) => {
     return (
@@ -17,6 +17,7 @@ const createToken = (userId) => {
         expiresIn: config.jwtExpiration,
     });
 };
+
 exports.register = (req, res) => {
     if (!isRequestValid(req)) {
         res.status(400).send({ message: "Invalid request!" });

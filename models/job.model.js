@@ -13,12 +13,10 @@ const JobSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    // TODO: Search how to do a counter depend on the amount of
-    // entries with the same position
-    // candidates: {
-    //     type: Number,
-    //     required: true
-    // }
+    candidates: {
+        type: Number,
+        default: 0,
+    },
     date_open: {
         type: Date,
         default: Date.now,

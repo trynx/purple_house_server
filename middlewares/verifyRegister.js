@@ -1,6 +1,6 @@
-const db = require("../models/index");
+const models = require("../models");
 
-const User = db.user;
+const User = models.user;
 
 exports.checkUsernameDuplication = (req, res, next) => {
     User.findOne({
