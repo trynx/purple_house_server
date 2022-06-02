@@ -11,17 +11,14 @@ const candidate = require("./routes/api/candidate.routes");
 
 const app = express();
 
+// Add cors to be able to speak between the front and back
 app.use(cors(corsOptions));
+
 // Parse requests of content-type - application/json
 app.use(express.json());
 
 // Parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
-
-//#region Previous things - keep for now if need something
-// const cors = require("cors");
-// require("dotenv").config({ path: "./config.env" });
-//#endregion Previous things - keep for now if need something
 
 // Don't connect to DB when in test, as it will happen in the test cases
 if (process.env.NODE_ENV !== "test") {

@@ -7,15 +7,13 @@ exports.checkUsernameDuplication = (req, res, next) => {
         username: req.body.username,
     }).exec((err, position) => {
         if (err) {
-            res.status(500).send({ message: err });
-            return;
+            return res.status(500).send({ message: err });
         }
 
         if (position) {
-            res.status(400).send({
+            return res.status(400).send({
                 message: "Failed, username already exist!",
             });
-            return;
         }
 
         next();

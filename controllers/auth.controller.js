@@ -20,8 +20,7 @@ const createToken = (userId) => {
 
 exports.register = (req, res) => {
     if (!isRequestValid(req)) {
-        res.status(400).send({ message: "Invalid request!" });
-        return;
+        return res.status(400).send({ message: "Invalid request!" });
     }
 
     // TODO: Validate password sastify the conditions (over 8 letters, etc...)
@@ -33,8 +32,7 @@ exports.register = (req, res) => {
 
     user.save((err, user) => {
         if (err) {
-            res.status(500).send({ message: err });
-            return;
+            return res.status(500).send({ message: err });
         }
 
         res.send({ message: "User was registered successfully :)" });
@@ -43,16 +41,14 @@ exports.register = (req, res) => {
 
 exports.signin = (req, res) => {
     if (!isRequestValid(req)) {
-        res.status(400).send({ message: "Invalid request!" });
-        return;
+        return res.status(400).send({ message: "Invalid request!" });
     }
 
     User.findOne({
         username: req.body.username,
     }).exec(async (err, user) => {
         if (err) {
-            res.status(500).send({ message: err });
-            return;
+            return res.status(500).send({ message: err });
         }
 
         if (!user) {
@@ -87,7 +83,7 @@ exports.signin = (req, res) => {
 exports.refreshToken = async (req, res) => {
     const { refreshToken: requestToken } = req.body;
     if (requestToken == null) {
-        return res.status(403).json({ message: "Refresh Token is required!" });
+        return res.status(403).send({ message: "Refresh Token is required!" });
     }
 
     try {
@@ -95,7 +91,7 @@ exports.refreshToken = async (req, res) => {
         if (!refreshToken) {
             return res
                 .status(403)
-                .json({ message: "Refresh token is not in database!" });
+                .send({ message: "Refresh token is not in database!" });
         }
 
         // @ts-ignore custom statics function - JS intellisence can't recognize it
@@ -104,7 +100,7 @@ exports.refreshToken = async (req, res) => {
                 useFindAndModify: false,
             }).exec();
 
-            return res.status(403).json({
+            return res.status(403).send({
                 messsage:
                     "Refresh token was expired. Please make a new signin request",
             });
@@ -112,7 +108,7 @@ exports.refreshToken = async (req, res) => {
 
         let newAccessToken = createToken(refreshToken.user._id);
 
-        return res.status(200).json({
+        return res.status(200).send({
             accessToken: newAccessToken,
             refreshToken: refreshToken.token,
         });

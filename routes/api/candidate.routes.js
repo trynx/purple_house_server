@@ -7,6 +7,7 @@ const {
 } = require("../../controllers/candidate.controller");
 
 router.post("/create", [verifyToken], createCandidate);
+
 router.get("", [verifyToken], allCandidates);
 
 module.exports = router;
