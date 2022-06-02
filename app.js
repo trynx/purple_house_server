@@ -7,6 +7,7 @@ const corsOptions = {
 // Routes
 const jobs = require("./routes/api/job.routes");
 const auth = require("./routes/api/auth.routes");
+const candidate = require("./routes/api/candidate.routes");
 
 const app = express();
 
@@ -46,6 +47,7 @@ app.get("/", (req, res) => res.send("I am Groot or not..."));
 // Add Routes
 app.use("/api/jobs", jobs);
 app.use("/api/auth", auth);
+app.use("/api/candidate", candidate);
 
 const port = process.env.PORT || 8088;
 

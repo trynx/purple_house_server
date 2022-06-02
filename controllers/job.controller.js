@@ -32,7 +32,6 @@ exports.createJob = (req, res) => {
     });
 };
 
-// TODO
 exports.allJobs = (req, res) => {
     Job.find({}, (err, jobs) => {
         if (err) {
