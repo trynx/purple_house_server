@@ -2,5 +2,6 @@
 const db = {};
 db.job = require("./job.model");
 db.user = require("./user.model");
+db.refreshToken = require("./refreshToken.model");
 
 module.exports = db;

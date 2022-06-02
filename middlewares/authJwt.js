@@ -1,5 +1,16 @@
-const config = require("config");
+const config = require("./../config/auth.config");
 const jwt = require("jsonwebtoken");
+
+const { TokenExpiredError } = jwt;
+const catchError = (err, res) => {
+    if (err instanceof TokenExpiredError) {
+        return res
+            .status(401)
+            .send({ message: "Unauthorized! Access token expired!" });
+    }
+
+    return res.status(401).send({ message: "Unauthorized!" });
+};
 
 exports.verifyToken = (req, res, next) => {
     let token = req.headers["x-access-token"];
@@ -7,17 +18,12 @@ exports.verifyToken = (req, res, next) => {
         return res.status(403).send({ message: "No token provided!" });
     }
 
-    // @ts-ignore
     jwt.verify(token, config.secret, (err, decoded) => {
         if (err) {
-            return res
-                .status(401)
-                .send({ message: "Unauthorized! Access token was expired!" });
+            return catchError(err, res);
         }
 
         req.userId = decoded.id;
         next();
     });
 };
-
-// module.exports = verifyToken;

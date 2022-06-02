@@ -21,5 +21,3 @@ exports.checkUsernameDuplication = (req, res, next) => {
         next();
     });
 };
-
-// module.exports = checkUsernameDuplication;

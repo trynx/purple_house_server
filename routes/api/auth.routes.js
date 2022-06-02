@@ -3,7 +3,11 @@ const {
     checkUsernameDuplication,
 } = require("../../middlewares/verifyRegister");
 
-const { register, signin } = require("../../controllers/auth.controller");
+const {
+    register,
+    signin,
+    refreshToken,
+} = require("../../controllers/auth.controller");
 
 const router = express.Router();
 router.use((req, res, next) => {
@@ -18,5 +22,7 @@ router.use((req, res, next) => {
 router.post("/register", [checkUsernameDuplication], register);
 
 router.post("/signin", signin);
+
+router.post("/refreshtoken", refreshToken);
 
 module.exports = router;
