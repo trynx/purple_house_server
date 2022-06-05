@@ -6,7 +6,10 @@ const catchError = (err, res) => {
     if (err instanceof TokenExpiredError) {
         return res
             .status(401)
-            .send({ message: "Unauthorized! Access token expired!" });
+            .send({
+                message: "Unauthorized! Access token expired!",
+                isRetry: true,
+            });
     }
 
     return res.status(401).send({ message: "Unauthorized!" });

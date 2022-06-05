@@ -7,7 +7,7 @@ const { user: User, refreshToken: RefreshToken } = models;
 const isRequestValid = (req) => {
     return (
         Object.keys(req.body).length !== 0 &&
-        !!req.body.username &&
+        !!req.body.email &&
         !!req.body.password
     );
 };
@@ -26,7 +26,7 @@ exports.register = (req, res) => {
     // TODO: Validate password sastify the conditions (over 8 letters, etc...)
     // TODO: Validate email sastify the conditions (regex that the email is valid)
     const user = new User({
-        username: req.body.username,
+        email: req.body.email,
         password: bcrypt.hashSync(req.body.password),
     });
 
@@ -45,7 +45,7 @@ exports.signin = (req, res) => {
     }
 
     User.findOne({
-        username: req.body.username,
+        email: req.body.email,
     }).exec(async (err, user) => {
         if (err) {
             return res.status(500).send({ message: err });
@@ -73,7 +73,7 @@ exports.signin = (req, res) => {
 
         res.status(200).send({
             id: user._id,
-            username: user.username,
+            email: user.email,
             accessToken: token,
             refreshToken,
         });

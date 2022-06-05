@@ -4,7 +4,7 @@ const User = models.user;
 
 exports.checkUsernameDuplication = (req, res, next) => {
     User.findOne({
-        username: req.body.username,
+        email: req.body.email,
     }).exec((err, position) => {
         if (err) {
             return res.status(500).send({ message: err });
@@ -12,7 +12,7 @@ exports.checkUsernameDuplication = (req, res, next) => {
 
         if (position) {
             return res.status(400).send({
-                message: "Failed, username already exist!",
+                message: "Failed, user already exist!",
             });
         }
 
