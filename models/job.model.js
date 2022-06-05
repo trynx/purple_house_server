@@ -17,6 +17,12 @@ const JobSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
     },
+    candidates: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Candidate",
+        },
+    ],
 });
 
 const Job = mongoose.model("Job", JobSchema);

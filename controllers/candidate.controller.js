@@ -1,4 +1,4 @@
-const { candidate: Candidate } = require("../models");
+const { candidate: Candidate, job: Job } = require("../models");
 
 const isRequestValid = (req) => {
     return (
@@ -26,8 +26,17 @@ exports.createCandidate = (req, res) => {
         position: req.body.position,
     });
 
-    candidate.save((err, candidate) => {
+    candidate.save(async (err, candidate) => {
         if (err) {
+            return res.status(500).send({ message: err });
+        }
+
+        try {
+            await Job.findOneAndUpdate(
+                { _id: { $in: req.body.position } },
+                { $push: { candidates: candidate._id } }
+            ).exec();
+        } catch (err) {
             return res.status(500).send({ message: err });
         }
 
