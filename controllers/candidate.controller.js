@@ -1,4 +1,5 @@
 const { candidate: Candidate, job: Job } = require("../models");
+const { upload } = require("../services/uploadS3");
 
 const isRequestValid = (req) => {
     return (
@@ -7,16 +8,45 @@ const isRequestValid = (req) => {
         !!req.body.email &&
         !!req.body.phone &&
         !!req.body.currentJob &&
-        !!req.body.position
+        !!req.body.position &&
+        !!req.file
     );
 };
 
-exports.createCandidate = (req, res) => {
+exports.createCandidate = async (req, res) => {
     if (!isRequestValid(req)) {
         return res.status(400).send({ message: "Invalid request!" });
     }
 
-    // TODO: Can add a check that can't create a candidate which is already subscribed to the same position
+    // TODO: Check that can't create a candidate which is already
+    // subscribed to the same position
+    try {
+        const candidateEmail = await Candidate.find({
+            email: req.body.email,
+            position: req.body.position,
+        }).exec();
+        if (candidateEmail && candidateEmail.length > 0) {
+            return res
+                .status(500)
+                .send({
+                    message:
+                        "Candidate with that email and position already exist!",
+                });
+        }
+    } catch (err) {
+        return res.status(400).send({ message: "Couldn't verify email" });
+    }
+
+    let resumeUrl;
+    try {
+        resumeUrl = await upload(req.file);
+    } catch (err) {
+        return res.status(500).send({ message: err.message });
+    }
+
+    if (!resumeUrl) {
+        return res.status(500).send({ message: "Couldn't upload file." });
+    }
 
     const candidate = new Candidate({
         name: req.body.name,
@@ -24,6 +54,7 @@ exports.createCandidate = (req, res) => {
         phone: req.body.phone,
         currentJob: req.body.currentJob,
         position: req.body.position,
+        resumeUrl,
     });
 
     candidate.save(async (err, candidate) => {
@@ -46,12 +77,11 @@ exports.createCandidate = (req, res) => {
     });
 };
 
-exports.allCandidates = (req, res) => {
-    Candidate.find({}, (err, candidates) => {
-        if (err) {
-            return res.status(500).send({ message: err });
-        }
-
+exports.allCandidates = async (req, res) => {
+    try {
+        const candidates = await Candidate.find({}).populate("position").exec();
         res.status(200).send(candidates);
-    });
+    } catch (err) {
+        return res.status(500).send({ message: err });
+    }
 };
