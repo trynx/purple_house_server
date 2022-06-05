@@ -4,7 +4,6 @@ const cors = require("cors");
 const corsOptions = {
     origin: "http://localhost:3000",
 };
-const fileUpload = require("express-fileupload");
 
 // Routes
 const job = require("./routes/api/job.routes");
@@ -21,9 +20,6 @@ app.use(express.json());
 
 // Parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
-
-// For uploading files
-// app.use(fileUpload({ limits: { fileSize: 5 * 1024 * 1024 } }));
 
 // Don't connect to DB when in test, as it will happen in the test cases
 if (process.env.NODE_ENV !== "test") {

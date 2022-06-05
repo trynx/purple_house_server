@@ -7,10 +7,13 @@ const upload = multer({ dest: "uploads/" });
 const {
     createCandidate,
     allCandidates,
+    candidateResume,
 } = require("../../controllers/candidate.controller");
 
 router.post("/create", [verifyToken, upload.single("file")], createCandidate);
 
 router.get("", [verifyToken], allCandidates);
+
+router.post("/resume", [verifyToken], candidateResume);
 
 module.exports = router;

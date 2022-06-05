@@ -1,44 +1,31 @@
 const fs = require("fs");
-const AWS = require("aws-sdk");
-// TODO: Change as needed for env - dotenv
-// const bucketName = process.env.AWS_BUCKET_NAME
-// const region = process.env.AWS_BUCKET_REGION
-// const accessKeyId = process.env.AWS_ACCESS_KEY
-// const secretAccessKey = process.env.AWS_SECRET_KEY
+const { s3, bucketName } = require("./s3");
 
-const bucketName = "purple.house.ta";
-const region = "eu-central-1";
-const accessKeyId = "AKIAXSPLDJVC36ZLLUBO";
-const secretAccessKey = "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";
-
-const s3 = new AWS.S3({
-    accessKeyId: accessKeyId,
-    secretAccessKey: secretAccessKey,
-    region: region,
-});
-
-async function upload(file) {
+async function upload(file, folder) {
+    // TODO: Can add validation of the name of the file, to avoid so nasty things
     let mimeType = file.mimetype;
     const fileStream = fs.createReadStream(file.path);
 
+    const fullPath = `${bucketName}/${folder ?? ""}`;
     const params = {
-        Bucket: `${bucketName}/resumes`,
+        Bucket: fullPath,
         Key: file.originalname,
         Body: fileStream,
         ContentType: mimeType,
     };
 
-    let data;
-
     try {
-        data = await promiseUpload(params);
+        await promiseUpload(params);
     } catch (err) {
         console.error(err);
 
         return "";
     }
 
-    return data.Location;
+    const fileKey =
+        fullPath.replace(bucketName + "/", "") + `/${file.originalname}`;
+
+    return fileKey;
 }
 
 function promiseUpload(params) {

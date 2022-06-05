@@ -1,5 +1,6 @@
 const { candidate: Candidate, job: Job } = require("../models");
 const { upload } = require("../services/uploadS3");
+const { download } = require("../services/downloadS3");
 
 const isRequestValid = (req) => {
     return (
@@ -18,7 +19,7 @@ exports.createCandidate = async (req, res) => {
         return res.status(400).send({ message: "Invalid request!" });
     }
 
-    // TODO: Check that can't create a candidate which is already
+    // Check that can't create a candidate which is already
     // subscribed to the same position
     try {
         const candidateEmail = await Candidate.find({
@@ -26,25 +27,23 @@ exports.createCandidate = async (req, res) => {
             position: req.body.position,
         }).exec();
         if (candidateEmail && candidateEmail.length > 0) {
-            return res
-                .status(500)
-                .send({
-                    message:
-                        "Candidate with that email and position already exist!",
-                });
+            return res.status(500).send({
+                message:
+                    "Candidate with that email and position already exist!",
+            });
         }
     } catch (err) {
         return res.status(400).send({ message: "Couldn't verify email" });
     }
 
-    let resumeUrl;
+    let resumeKey;
     try {
-        resumeUrl = await upload(req.file);
+        resumeKey = await upload(req.file, "resume");
     } catch (err) {
         return res.status(500).send({ message: err.message });
     }
 
-    if (!resumeUrl) {
+    if (!resumeKey) {
         return res.status(500).send({ message: "Couldn't upload file." });
     }
 
@@ -54,7 +53,7 @@ exports.createCandidate = async (req, res) => {
         phone: req.body.phone,
         currentJob: req.body.currentJob,
         position: req.body.position,
-        resumeUrl,
+        resumeKey,
     });
 
     candidate.save(async (err, candidate) => {
@@ -84,4 +83,12 @@ exports.allCandidates = async (req, res) => {
     } catch (err) {
         return res.status(500).send({ message: err });
     }
+};
+
+exports.candidateResume = async (req, res) => {
+    if (Object.keys(req.body).length === 0 || !!!req.body.resumeKey) {
+        return res.status(400).send({ message: "Invalid request!" });
+    }
+
+    download(req.body.resumeKey, res);
 };

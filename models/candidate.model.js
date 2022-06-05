@@ -21,7 +21,7 @@ const CandidateSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Job",
     },
-    resumeUrl: {
+    resumeKey: {
         type: String,
         required: true,
     },
