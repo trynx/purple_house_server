@@ -33,12 +33,14 @@ exports.createCandidate = async (req, res) => {
             });
         }
     } catch (err) {
-        return res.status(400).send({ message: "Couldn't verify email" });
+        return res
+            .status(400)
+            .send({ message: "Couldn't verify candidate duplication." });
     }
 
     let resumeKey;
     try {
-        resumeKey = await upload(req.file, "resume");
+        resumeKey = await upload(req.file, "resumes");
     } catch (err) {
         return res.status(500).send({ message: err.message });
     }

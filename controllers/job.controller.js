@@ -36,7 +36,6 @@ exports.createJob = (req, res) => {
 exports.allJobs = async (req, res) => {
     try {
         const jobs = await Job.find({}).populate("candidates").exec();
-        console.log({ jobs });
         res.status(200).send(jobs);
     } catch (err) {
         return res.status(500).send({ message: err });

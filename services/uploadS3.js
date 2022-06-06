@@ -4,13 +4,12 @@ const { s3, bucketName } = require("./s3");
 async function upload(file, folder) {
     // TODO: Can add validation of the name of the file, to avoid so nasty things
     let mimeType = file.mimetype;
-    const fileStream = fs.createReadStream(file.path);
 
     const fullPath = `${bucketName}/${folder ?? ""}`;
     const params = {
         Bucket: fullPath,
         Key: file.originalname,
-        Body: fileStream,
+        Body: file.buffer,
         ContentType: mimeType,
     };
 
