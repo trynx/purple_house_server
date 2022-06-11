@@ -18,7 +18,7 @@ If you're using VS code, just run F5(debugging), and it will run the `npm run wa
 
 # Run MongoDB
 
-After you have the local MongoDB installed, run `npm run dbon`.
+After you have the local MongoDB installed and your db folder ` C:\\data\\db\\`, run `npm run dbon`.
 
 # Tests
 

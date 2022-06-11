@@ -1,6 +1,5 @@
 const models = require("../models");
 const Job = models.job;
-const Candidate = models.candidate;
 
 const isRequestValid = (req) => {
     return (
