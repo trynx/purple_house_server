@@ -1,3 +1,4 @@
+const randomColor = require("randomcolor");
 const models = require("../models");
 const Job = models.job;
 
@@ -21,6 +22,7 @@ exports.createJob = (req, res) => {
         position: req.body.position,
         department: req.body.department,
         office: req.body.office,
+        color: randomColor({ luminosity: "dark" }),
     });
 
     job.save((err, job) => {

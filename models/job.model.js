@@ -23,6 +23,9 @@ const JobSchema = new mongoose.Schema({
             ref: "Candidate",
         },
     ],
+    color: {
+        type: String,
+    },
 });
 
 const Job = mongoose.model("Job", JobSchema);
