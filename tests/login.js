@@ -1,6 +1,6 @@
 const theAccount = {
-    username: "nico",
-    password: "1",
+    email: "nico@gmail.com",
+    password: "12345678",
 };
 
 // Should register before it can login
